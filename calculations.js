@@ -13,7 +13,7 @@ const keys = calculator.querySelector('.calculator__keys');
 const display = calculator.querySelector('.calculator__display');
 
 
-
+//The change
 
 //Listen for all keypresses.
 keys.addEventListener('click', e => {
