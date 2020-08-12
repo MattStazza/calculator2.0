@@ -1,3 +1,5 @@
+// 12/8/2020
+
 // Reference to the Calculator <div> in the HTML Document.
 const calculator = document.querySelector('.calculator');
 
