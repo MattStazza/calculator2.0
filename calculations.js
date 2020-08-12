@@ -1,7 +1,3 @@
-
-
-
-
 // Reference to the Calculator <div> in the HTML Document.
 const calculator = document.querySelector('.calculator');
 
@@ -15,6 +11,30 @@ const display = calculator.querySelector('.calculator__display');
 
 
 
+//-CALCULATIONS--------------------------------------------------------------|
+        
+const calculate = (n1, operator, n2) => {
+            
+    // Perform calculation and return calculated value.
+    let result = '';
+    
+    if (operator === 'add') {
+        result = parseFloat(n1) + parseFloat(n2); 
+    } else if (operator === 'subtract') {
+        result = parseFloat(n1) - parseFloat(n2); 
+    } else if (operator === 'multiply') {
+        result = parseFloat(n1) * parseFloat(n2);
+    } else if (operator === 'divide') {
+        result = parseFloat(n1) / parseFloat(n2);
+    }
+
+    return result;
+}
+//-------------------------------------------------------------------------|
+
+
+
+
 // Listen for all keypresses.
 keys.addEventListener('click', e => {
 
@@ -22,7 +42,6 @@ keys.addEventListener('click', e => {
     // checks to see if it is a button.
     if (e.target.matches('button')) {
         
-
         //---Variables---
         const key = e.target;
         const action = key.dataset.action;
@@ -33,13 +52,12 @@ keys.addEventListener('click', e => {
         const previousKeyType = calculator.dataset.previousKeyType; 
 
 
+
+
         // DETERMINING THE TYPE OF KEY THAT WAS PRESSED.-------------------------|
         
         // NUMBER KEYS:
         if(!action){
-
-            // Updating previousKeyType to number key.
-            calculator.dataset.previousKeyType = 'number';
 
             // Is the display currently equal to '0' OR was the previous key pressed an operator key?
             if (displayedNum === '0' || previousKeyType === 'operator') {
@@ -57,9 +75,13 @@ keys.addEventListener('click', e => {
             // Remove .is-depressed class from all keys
             Array.from(key.parentNode.children)
                 .forEach(k => k.classList.remove('is-depressed'))
+
+            // Updating previousKeyType to number key.
+            calculator.dataset.previousKeyType = 'number';
         }
 
 
+        // ------------|
 
 
         // OPERATOR KEYS:
@@ -70,13 +92,28 @@ keys.addEventListener('click', e => {
             action === 'divide' 
         )   {
 
-            //  Updating previousKeyType to an operator key.
-            calculator.dataset.previousKeyType = 'operator';
+            const firstValue = calculator.dataset.firstValue
+
+            const operator = calculator.dataset.operator
+            
+            // Storing the current number in the display to the 'secondValue' variable.
+            const secondValue = displayedNum;  
+
+            // If the first number and operator values are known (Have been clicked by the user)...
+            // ...then calculate the result when the user clicks another number. 
+            // [Note: the secondValue isn't needed because it always exists in the display.]
+            if(firstValue && operator){
+                display.textContent = calculate(firstValue, operator, secondValue);
+            }
+
 
             // Adding a style (from the CSS)...
             // ...to indicate that the operator key is pressed.
             key.classList.add('is-depressed');
 
+            //  Updating previousKeyType to an operator key.
+            calculator.dataset.previousKeyType = 'operator';  
+            
             // Storing the displayed number as the first value.
             calculator.dataset.firstValue = displayedNum;
 
@@ -85,13 +122,11 @@ keys.addEventListener('click', e => {
         }
 
 
+        // ------------|
 
 
             // DECIMAL KEY:
             if(action === 'decimal'){
-                
-                // Updating previousKeyType to decimal key.
-                calculator.dataset.previousKeyType = 'decimal';
 
                 // Do nothing if string has a dot
                 if (!displayedNum.includes('.')) {
@@ -99,9 +134,14 @@ keys.addEventListener('click', e => {
                 } else if (previousKeyType === 'operator'){
                     display.textContent = '0';
                 }
+                
+                // Updating previousKeyType to decimal key.
+                calculator.dataset.previousKeyType = 'decimal';
+                
             }
 
-
+            
+            // ----------|
 
 
             // CLEAR KEY:
@@ -111,52 +151,26 @@ keys.addEventListener('click', e => {
                 calculator.dataset.previousKeyType = 'clear';
 
             }
-
-
-            
-
-  //-CALCULATIONS--------------------------------------------------------------|
-        
-        const calculate = (n1, operator, n2) => {
-            
-            // Perform calculation and return calculated value.
-            let result = '';
-            
-            if (operator === 'add') {
-                result = parseFloat(n1) + parseFloat(n2); 
-            } else if (operator === 'subtract') {
-                result = parseFloat(n1) - parseFloat(n2); 
-            } else if (operator === 'multiply') {
-                result = parseFloat(n1) * parseFloat(n2);
-            } else if (operator === 'divide') {
-                result = parseFloat(n1) / parseFloat(n2);
-            }
-
-            return result;
-        }
-    //-------------------------------------------------------------------------|
            
-    
 
-    
-        // CALUCLATE (EQUALS) KEY:
-            if(action === 'calculate'){
+            // ------------|
 
-                // Updating previousKeyType to calculate key.
-                calculator.dataset.previousKeyType = 'calcuate';
+            
+            // CALUCLATE (EQUALS) KEY:
+                if(action === 'calculate'){
 
-                // Stores the first value.
-                const firstValue = calculator.dataset.firstValue;
+                    // Stores the first value.
+                    const firstValue = calculator.dataset.firstValue;
 
-                // Stores the operator action.
-                const operator = calculator.dataset.operator;
+                    // Stores the operator action.
+                    const operator = calculator.dataset.operator;
 
-                // When the user presses the [=] button...
-                // ...The current number in the display is set to the 'secondValue' variable.
-                const secondValue = displayedNum;
+                    // When the user presses the [=] button...
+                    // ...The current number in the display is set to the 'secondValue' variable.
+                    const secondValue = displayedNum;
 
-                // Updates the display to the result.
-                display.textContent = calculate(firstValue, operator, secondValue);
+                    // Updates the display to the result.
+                    display.textContent = calculate(firstValue, operator, secondValue);
             }
 
     }
