@@ -8,4 +8,6 @@ The CSS in this project is not my own. I downloaded it from the tutorial website
 
 As I work on the calculator I will be updating my progress here on GitHub so any feedback is appreciated so I can further develop my skills.
 
+To see the latest progress please navigate to the "latestBranch"
+
 Thanks for reading! :)
