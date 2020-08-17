@@ -11,20 +11,25 @@ const display = calculator.querySelector(".calculator__display");
 //-CALCULATIONS--------------------------------------------------------------|
 
 const calculate = (n1, operator, n2) => {
+  // Converts firstNum and secondNum into floats (number variables)
+  const firstNum = parseFloat(n1);
+  const secondNum = parseFloat(n2);
   // Perform calculation and return calculated value.
-  let result = "";
-
   if (operator === "add") {
-    result = parseFloat(n1) + parseFloat(n2);
-  } else if (operator === "subtract") {
-    result = parseFloat(n1) - parseFloat(n2);
-  } else if (operator === "multiply") {
-    result = parseFloat(n1) * parseFloat(n2);
-  } else if (operator === "divide") {
-    result = parseFloat(n1) / parseFloat(n2);
+    return firstNum + secondNum;
   }
 
-  return result;
+  if (operator === "subtract") {
+    return firstNum - secondNum;
+  }
+
+  if (operator === "multiply") {
+    return firstNum * secondNum;
+  }
+
+  if (operator === "divide") {
+    return firstNum / secondNum;
+  }
 };
 //-------------------------------------------------------------------------|
 
