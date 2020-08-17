@@ -47,7 +47,11 @@ keys.addEventListener("click", (e) => {
     // NUMBER KEYS:
     if (!action) {
       // Is the display currently equal to '0' OR was the previous key pressed an operator key?
-      if (displayedNum === "0" || previousKeyType === "operator") {
+      if (
+        displayedNum === "0" ||
+        previousKeyType === "operator" ||
+        previousKeyType === "calculate"
+      ) {
         // Updates display to the number pressed.
         display.textContent = keyContent;
 
@@ -62,7 +66,6 @@ keys.addEventListener("click", (e) => {
         k.classList.remove("is-depressed")
       );
 
-      // Updating previousKeyType to number key.
       calculator.dataset.previousKeyType = "number";
     }
 
@@ -80,7 +83,12 @@ keys.addEventListener("click", (e) => {
       const secondValue = displayedNum;
 
       // [Note: the secondValue isn't needed because it always exists in the display.]
-      if (firstValue && operator && previousKeyType !== "operator") {
+      if (
+        firstValue &&
+        operator &&
+        previousKeyType !== "operator" &&
+        previousKeyType !== "calculate"
+      ) {
         const calcValue = calculate(firstValue, operator, secondValue);
         display.textContent = calcValue;
 
@@ -108,10 +116,13 @@ keys.addEventListener("click", (e) => {
       // Do nothing if string has a dot already.
       if (!displayedNum.includes(".")) {
         display.textContent = displayedNum + ".";
-      }
 
-      // Display '0.' if user presses the decimal key AFTER an operator key.
-      if (previousKeyType === "operator") {
+        // Display '0.' if user presses the decimal key AFTER an operator key
+        // OR calculate key.
+      } else if (
+        previousKeyType === "operator" ||
+        previousKeyType === "calculate"
+      ) {
         display.textContent = "0.";
       }
 
@@ -121,13 +132,37 @@ keys.addEventListener("click", (e) => {
 
     // ----------|
 
-    // CLEAR KEY:
+    // (NOT) CLEAR KEY [CE]:
+    if (action !== "clear") {
+      // Reference to the clear button and data.
+      const clearButton = calculator.querySelector("[data-action=clear]");
+
+      // Updating the Clear Button's text to "CE".
+      clearButton.textContent = "CE";
+    }
+
+    //-----------|
+
+    // CLEAR KEY [AC]
     if (action === "clear") {
+      // Reset the Calculator to its initial state
+      if ((key.textContent = "AC")) {
+        calculator.dataset.firstValue = "";
+        calculator.dataset.modValue = "";
+        calculator.dataset.operator = "";
+        calculator.dataset.previousKeyType = "";
+      } else {
+        // Updating the Clear Button's text to "AC".
+        key.textContent = "AC";
+      }
+
       // Sets display to 0.
       display.textContent = 0;
 
-      // Sets first value to 0.
-      calculator.dataset.firstValue = 0;
+      // Remove .is-depressed class from all keys
+      Array.from(key.parentNode.children).forEach((k) =>
+        k.classList.remove("is-depressed")
+      );
 
       //Updating previousKeyType to clear key.
       calculator.dataset.previousKeyType = "clear";
